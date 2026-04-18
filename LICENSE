@@ -6,6 +6,11 @@
 
    1. Definitions.
 
+      İstisna: Bu lisans yalnızca kaynak kodları için geçerlidir. 
+     /Resources/Images  /Resources/Splash  /Resources/AppIcon klasörleri altındaki
+     görsel içerikler Apache 2.0 lisansına dahil değildir ve tüm hakları saklıdır.
+
+
       "License" shall mean the terms and conditions for use, reproduction,
       and distribution as defined by Sections 1 through 9 of this document.
 
