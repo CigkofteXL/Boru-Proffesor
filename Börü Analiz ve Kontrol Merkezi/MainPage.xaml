@@ -1,0 +1,560 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Börü_Analiz_ve_Kontrol_Merkezi.MainPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#121212">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:PlatformConverter xmlns:local="clr-namespace:Börü_Analiz_ve_Kontrol_Merkezi" x:Key="PlatformCevirici" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto, *">
+
+        <Grid Grid.Row="0" ColumnDefinitions="*,*,*" HorizontalOptions="Center" WidthRequest="600" Margin="0,15,0,20">
+            <Button Grid.Column="0" x:Name="BtnAnalizSekmesi" Text="📊 Analiz Merkezi" 
+                    BackgroundColor="#4CAF50" TextColor="White" CornerRadius="8" 
+                    HeightRequest="45" Margin="5" Clicked="OnAnalizSekmesiClicked"/>
+            <Button Grid.Column="1" x:Name="BtnYonetimSekmesi" Text="🧠 Komuta Merkezi" 
+                    BackgroundColor="#2D2D2D" TextColor="Gray" CornerRadius="8" 
+                    HeightRequest="45" Margin="5" Clicked="OnYonetimSekmesiClicked"/>
+            <Button Grid.Column="2" x:Name="BtnAyarlarSekmesi" Text="🛠️ Ayarlar" 
+                    BackgroundColor="#2D2D2D" TextColor="Gray" CornerRadius="8" 
+                    HeightRequest="45" Margin="5" Clicked="OnAyarlarSekmesiClicked"/>
+        </Grid>
+
+        <Grid x:Name="AnalizEkrani" Grid.Row="1" ColumnDefinitions="320, *" IsVisible="True">
+
+            <Border Grid.Column="0" BackgroundColor="#1E1E1E" StrokeThickness="0" Margin="10" Padding="20" StrokeShape="RoundRectangle 10">
+                <ScrollView>
+                    <VerticalStackLayout Spacing="15">
+                        <VerticalStackLayout HorizontalOptions="Center" Spacing="0" Margin="0,10,0,15">
+
+                            <Border WidthRequest="128" HeightRequest="128" StrokeShape="RoundRectangle 64" StrokeThickness="3" Stroke="#ffc300" BackgroundColor="#1E1E1E" HorizontalOptions="Center" Padding="5">
+                                <Image Source="image.png" Aspect="AspectFill" HorizontalOptions="Center" VerticalOptions="Center" />
+                            </Border>
+
+                            <Label Text="BÖRÜ YÖNETİM MERKEZİ" 
+                               FontSize="26" 
+                               FontAttributes="Bold" 
+                               TextColor="#FFC300" 
+                               HorizontalOptions="Center" 
+                               HorizontalTextAlignment="Center" 
+                               Margin="0,15,0,0"/>      
+                        </VerticalStackLayout>
+                        <BoxView HeightRequest="1" Color="#333333" Margin="0,5" />
+
+                        <Label Text="Hesap Filtresi" TextColor="Gray" FontSize="12" />
+                        <Picker x:Name="PickerHesap" Title="Tüm Hesaplar" TextColor="White" BackgroundColor="#2D2D2D" />
+
+                        <Label Text="Platform" TextColor="Gray" FontSize="12" />
+                        <Picker x:Name="PickerPlatform" Title="Tümü" TextColor="White" BackgroundColor="#2D2D2D" />
+
+                        <Label Text="Oynanan Rol" TextColor="Gray" FontSize="12" />
+                        <Picker x:Name="PickerRol" Title="Tüm Roller" TextColor="White" BackgroundColor="#2D2D2D" />
+
+                        <Label Text="Maç Sonucu" TextColor="Gray" FontSize="12" />
+                        <Picker x:Name="PickerSonuc" Title="Tüm Sonuçlar" TextColor="White" BackgroundColor="#2D2D2D" />
+
+                        <Label Text="Zaman Aralığı" TextColor="Gray" FontSize="12" />
+                        <Picker x:Name="PickerZaman" Title="Zaman Seç" TextColor="White" BackgroundColor="#2D2D2D" />
+
+                        <Label Text="Sıralama Ölçütü" TextColor="Gray" FontSize="12" Margin="0,5,0,0"/>
+                        <Picker x:Name="PickerSiralama" Title="Sıralama Seç" TextColor="White" BackgroundColor="#2D2D2D" />
+
+                        <Label Text="🎯 Hedef Seviye (Level)" TextColor="Gray" FontSize="12" Margin="0,5,0,0"/>
+                        <Entry x:Name="EntryHedefLevel" Text="50" TextColor="White" BackgroundColor="#2D2D2D" Keyboard="Numeric" />
+
+                        <Button Text="Filtreleri Uygula" BackgroundColor="#4CAF50" TextColor="White" CornerRadius="8" Margin="0,15,0,0" Clicked="OnFiltreUygulaClicked"/>
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Border>
+
+           <Grid Grid.Column="1" RowDefinitions="Auto, Auto, *" Margin="10,10,20,10">
+
+                <ScrollView Grid.Row="0" Orientation="Horizontal" HorizontalScrollBarVisibility="Never" Margin="0,0,0,15">
+                    <HorizontalStackLayout Spacing="15">
+                        <Border BackgroundColor="#1E1E1E" Padding="20" WidthRequest="220" StrokeShape="RoundRectangle 10" StrokeThickness="0">
+                            <VerticalStackLayout>
+                                <Label Text="Banka Kasası (Altın)" TextColor="Gray" FontSize="12" />
+                                <Label x:Name="LblToplamAltin" Text="..." TextColor="#FFC107" FontSize="22" FontAttributes="Bold" />
+                                <Label x:Name="LblSatisaHazir" Text="..." TextColor="LightGray" FontSize="11" />
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border BackgroundColor="#1E1E1E" Padding="20" WidthRequest="220" StrokeShape="RoundRectangle 10" StrokeThickness="0">
+                            <VerticalStackLayout>
+                                <Label Text="Ort. Maç Süresi" TextColor="Gray" FontSize="12" />
+                                <Label x:Name="LblOrtalamaSure" Text="..." TextColor="White" FontSize="22" FontAttributes="Bold" />
+                                <Label Text="⚡ Sistem Ortalaması" TextColor="#4CAF50" FontSize="11" />
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border BackgroundColor="#1E1E1E" Padding="20" WidthRequest="220" StrokeShape="RoundRectangle 10" StrokeThickness="0">
+                            <VerticalStackLayout>
+                                <Label Text="En Verimli Rol" TextColor="Gray" FontSize="12" />
+                                <Label x:Name="LblEnKarliRol" Text="..." TextColor="#00BCD4" FontSize="22" FontAttributes="Bold" />
+                                <Label x:Name="LblEnKarliRolDetay" Text="..." TextColor="LightGray" FontSize="11" />
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border BackgroundColor="#1E1E1E" Padding="20" WidthRequest="220" StrokeShape="RoundRectangle 10" StrokeThickness="0">
+                            <VerticalStackLayout>
+                                <Label Text="Aktif Hesap (Son 1s)" TextColor="Gray" FontSize="12" />
+                                <Label x:Name="LblAktifBot" Text="..." TextColor="#00BCD4" FontSize="22" FontAttributes="Bold" />
+                                <Label x:Name="LblSistemDurumu" Text="..." TextColor="Orange" FontSize="11" />
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border BackgroundColor="#1E1E1E" Padding="20" WidthRequest="220" StrokeShape="RoundRectangle 10" StrokeThickness="0">
+                            <VerticalStackLayout>
+                                <Label Text="Motor Hızı (XPM)" TextColor="Gray" FontSize="12" />
+                                <Label x:Name="LblOrtalamaXPM" Text="..." TextColor="#E91E63" FontSize="22" FontAttributes="Bold" />
+                                <Label Text="🚀 Dakika başı ort. XP" TextColor="LightGray" FontSize="11" />
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border BackgroundColor="#1E1E1E" Padding="20" WidthRequest="220" StrokeShape="RoundRectangle 10" StrokeThickness="0">
+                            <VerticalStackLayout>
+                                <Label Text="24 Saatlik Hasat" TextColor="Gray" FontSize="12" />
+                                <Label x:Name="Lbl24SaatXp" Text="..." TextColor="#4CAF50" FontSize="22" FontAttributes="Bold" />
+                                <Label x:Name="Lbl24SaatMac" Text="..." TextColor="LightGray" FontSize="11" />
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border BackgroundColor="#1E1E1E" Padding="20" WidthRequest="220" StrokeShape="RoundRectangle 10" StrokeThickness="0">
+                            <VerticalStackLayout>
+                                <Label Text="Günün Şampiyonu" TextColor="Gray" FontSize="12" />
+                                <Label x:Name="LblSampiyonNick" Text="..." TextColor="#FF9800" FontSize="18" FontAttributes="Bold" LineBreakMode="TailTruncation" />
+                                <Label x:Name="LblSampiyonXp" Text="..." TextColor="LightGray" FontSize="11" />
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border BackgroundColor="#0f172a" Padding="20" WidthRequest="220" StrokeShape="RoundRectangle 10" Stroke="#1e293b" StrokeThickness="1">
+                            <VerticalStackLayout>
+                                <Label Text="Kazanılan Ömür ⏳" TextColor="Gray" FontSize="12" />
+                                <Label x:Name="LblKazanilanZaman" Text="..." TextColor="#7c3aed" FontSize="18" FontAttributes="Bold" />
+                                <Label x:Name="LblHedefDurum" Text="..." TextColor="LightGray" FontSize="11" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </HorizontalStackLayout>
+                </ScrollView>
+
+                <Grid Grid.Row="1" ColumnDefinitions="1.2*, 1.8*, 280" Margin="0,0,0,15" ColumnSpacing="15">
+
+                    <Border Grid.Column="0" BackgroundColor="#1E1E1E" Padding="15" StrokeShape="RoundRectangle 10" StrokeThickness="0">
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="⏰ En Verimli Saatler" TextColor="#FF9800" FontAttributes="Bold" FontSize="14" />
+                            <Label Text="Son 7 Gün Analizi" TextColor="Gray" FontSize="11" />
+                            <BoxView HeightRequest="1" Color="#333333" Margin="0,5" />
+                            <ScrollView HeightRequest="135" VerticalScrollBarVisibility="Default">
+                            <VerticalStackLayout x:Name="StackSaatAnaliz" Spacing="8">
+                                <Label Text="Veri analiz ediliyor..." TextColor="Gray" FontSize="12" />
+                            </VerticalStackLayout>
+                            </ScrollView>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Column="1" BackgroundColor="#1E1E1E" Padding="15" StrokeShape="RoundRectangle 10" StrokeThickness="0">
+                        <Grid RowDefinitions="Auto, *">
+                            <Label Grid.Row="0" Text="📊 Son Maçların XP Akışı" TextColor="#00BCD4" FontAttributes="Bold" Margin="0,0,0,10" />
+                            <HorizontalStackLayout Grid.Row="1" x:Name="StackXpBarlar" Spacing="10" HorizontalOptions="Center" VerticalOptions="End" HeightRequest="120" />
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Column="2" BackgroundColor="#1E1E1E" Padding="15" StrokeShape="RoundRectangle 10" StrokeThickness="0">
+                        <VerticalStackLayout Spacing="15" VerticalOptions="Center">
+                            <Label Text="⚔️ Win / Loss Oranı" TextColor="#FF9800" FontAttributes="Bold" HorizontalOptions="Center" />
+
+                            <HorizontalStackLayout Spacing="30" HorizontalOptions="Center">
+                                <VerticalStackLayout>
+                                    <Label Text="WIN" TextColor="#4CAF50" FontAttributes="Bold" HorizontalOptions="Center"/>
+                                    <Label x:Name="LblWinSayisi" Text="0" TextColor="White" FontSize="26" FontAttributes="Bold" HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+                                <VerticalStackLayout>
+                                    <Label Text="LOSS" TextColor="#F44336" FontAttributes="Bold" HorizontalOptions="Center"/>
+                                    <Label x:Name="LblLossSayisi" Text="0" TextColor="White" FontSize="26" FontAttributes="Bold" HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+                            </HorizontalStackLayout>
+
+                            <Border HeightRequest="12" StrokeShape="RoundRectangle 6" BackgroundColor="#333333" StrokeThickness="0" Margin="0,10,0,0">
+                                <Grid>
+                                    <BoxView x:Name="BarWin" BackgroundColor="#4CAF50" HorizontalOptions="Start" WidthRequest="0" />
+                                    <BoxView x:Name="BarLoss" BackgroundColor="#F44336" HorizontalOptions="End" WidthRequest="0" />
+                                </Grid>
+                            </Border>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Row="2" RowDefinitions="Auto, Auto, *">
+                    <Grid Grid.Row="0" ColumnDefinitions="2*, 1.5*, 1.5*, 1.5*, 2*, 2*, 1.5*" Margin="0,0,0,10">
+                        <Label Grid.Column="0" Text="Nick" TextColor="Gray" FontSize="12" FontAttributes="Bold" />
+                        <Label Grid.Column="1" Text="Lvl &amp; Tahmin" TextColor="Gray" FontSize="12" FontAttributes="Bold" />
+                        <Label Grid.Column="2" Text="Rol" TextColor="Gray" FontSize="12" FontAttributes="Bold" />
+                        <Label Grid.Column="3" Text="Süre" TextColor="Gray" FontSize="12" FontAttributes="Bold" />
+                        <Label Grid.Column="4" Text="Kazanım" TextColor="Gray" FontSize="12" FontAttributes="Bold" />
+                        <Label Grid.Column="5" Text="Sonuç" TextColor="Gray" FontSize="12" FontAttributes="Bold" />
+                        <Label Grid.Column="6" Text="Platform" TextColor="Gray" FontSize="12" FontAttributes="Bold" />
+                    </Grid>
+                    <BoxView Grid.Row="1" HeightRequest="1" Color="#333333" />
+
+                    <CollectionView x:Name="BotVerileriListesi" Grid.Row="2" Margin="0,10,0,0">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="2*, 1.5*, 1.5*, 1.5*, 2*, 2*, 1.5*" Padding="0,12">
+                                    <FlyoutBase.ContextFlyout>
+                                        <MenuFlyout>
+                                            <MenuFlyoutItem Text="📋 Nick Kopyala" Clicked="OnMenuKopyalaClicked" CommandParameter="{Binding accountnick}"/>
+                                            <MenuFlyoutItem Text="👁️ Gizle" Clicked="OnMenuSilClicked" CommandParameter="{Binding accountnick}"/>
+
+                                            <MenuFlyoutItem Text="🔥 Veritabanından Sil" Clicked="OnMenuKaliciSilClicked" CommandParameter="{Binding .}"/>
+                                        </MenuFlyout>
+                                    </FlyoutBase.ContextFlyout>
+
+                                    <Label Grid.Column="0" Text="{Binding MaskeliNick}" TextColor="White" FontAttributes="Bold" VerticalOptions="Center"/>
+
+                                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                        <Label Text="{Binding currentLevel}" TextColor="#FFC107" FontAttributes="Bold" FontSize="14" />
+                                        <Label Text="{Binding MezuniyetDurumu}" TextColor="Gray" FontSize="9" />
+                                    </VerticalStackLayout>
+
+                                    <Label Grid.Column="2" Text="{Binding GorselRol}" TextColor="LightBlue" VerticalOptions="Center"/>
+                                    <Label Grid.Column="3" Text="{Binding GorselSure}" TextColor="White" VerticalOptions="Center"/>
+                                    <Label Grid.Column="4" Text="{Binding KazanimOzet}" TextColor="#4CAF50" VerticalOptions="Center" />
+                                    <Label Grid.Column="5" Text="{Binding matchResult}" TextColor="LightGray" VerticalOptions="Center" />
+                                    <Label Grid.Column="6" Text="{Binding PlatformIcon}" TextColor="White" VerticalOptions="Center"/>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <Grid x:Name="YonetimEkrani" Grid.Row="1" ColumnDefinitions="320, *" IsVisible="False" Margin="10,0,20,10" ColumnSpacing="15">
+
+            <!-- SOL PANEL: AKTİF TİM LİSTESİ -->
+            <Border Grid.Column="0" BackgroundColor="#1E1E1E" StrokeThickness="0" Padding="15" StrokeShape="RoundRectangle 10">
+                <Grid RowDefinitions="Auto, Auto, *">
+                    <Label Grid.Row="0" Text="📡 Aktif Tim (Telsiz Ağı)" TextColor="#00BCD4" FontSize="18" FontAttributes="Bold" Margin="0,0,0,10"/>
+
+                    <!-- Tümünü Seç Kutusu -->
+                    <HorizontalStackLayout Grid.Row="1" Spacing="10" Margin="0,0,0,10">
+                        <CheckBox x:Name="ChkTumunuSec" Color="#00BCD4" />
+                        <Label Text="Tüm Timi Seç" TextColor="White" VerticalOptions="Center" FontAttributes="Bold"/>
+                    </HorizontalStackLayout>
+
+                    <!-- Tim Askerleri (C# ile bağlanacak test verisi) -->
+                    <!-- Tim Askerleri (Canlı Veriler Buraya Dolacak) -->
+                    <ScrollView Grid.Row="2">
+                        <VerticalStackLayout x:Name="SlAktifTim" Spacing="8">
+                            <!-- İçini tamamen sildik, C# burayı canlı dolduracak! -->
+                        </VerticalStackLayout>
+                    </ScrollView>
+                </Grid>
+            </Border>
+
+            <!-- SAĞ PANEL: KOMUTA KONSOLU -->
+            <Border Grid.Column="1" BackgroundColor="#1E1E1E" StrokeThickness="0" Padding="20" StrokeShape="RoundRectangle 10">
+                <ScrollView>
+                    <VerticalStackLayout Spacing="20" Padding="0,0,10,0">
+                        <Label Text="🛠️ Tim Operasyon Merkezi" TextColor="White" FontSize="22" FontAttributes="Bold"/>
+
+                        <!-- MODÜL 1: HIZLI VE ACİL KOMUTLAR -->
+                        <Border BackgroundColor="#252526" Padding="15" StrokeThickness="1" Stroke="#333" StrokeShape="RoundRectangle 8">
+                            <VerticalStackLayout Spacing="10">
+                                <Label Text="⚡ Hızlı Aksiyonlar" TextColor="#FFC300" FontAttributes="Bold"/>
+                                <Grid ColumnDefinitions="*, *, *, *, *" RowDefinitions="Auto, Auto" ColumnSpacing="10" RowSpacing="10">
+                                    <Button Grid.Row="0" Grid.Column="0" Text="🎡 Altın Çark" BackgroundColor="#FFC300" TextColor="Black" FontAttributes="Bold" CornerRadius="6" x:Name="BtnAltinCark"/>
+                                    <Button Grid.Row="0" Grid.Column="1" Text="🌹 Gül Çarkı" BackgroundColor="#E91E63" TextColor="White" FontAttributes="Bold" CornerRadius="6" x:Name="BtnGulCark"/>
+                                    <Button Grid.Row="0" Grid.Column="2" Text="🎁 Kutuları Aç" BackgroundColor="#4CAF50" TextColor="White" FontAttributes="Bold" CornerRadius="6" x:Name="BtnKutuAc"/>
+                                    <Button Grid.Row="0" Grid.Column="3" Text="📊 Durum Raporu" BackgroundColor="#00BCD4" TextColor="Black" FontAttributes="Bold" CornerRadius="6" x:Name="BtnDurumRaporu"/>
+                                    <Button Grid.Row="0" Grid.Column="4" Text="🔄 Sayfa Yenile" BackgroundColor="#2196F3" TextColor="White" FontAttributes="Bold" CornerRadius="6" x:Name="BtnSayfaYenile"/>
+
+                                    <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="👻 Panic Mode (Gizle/Göster)" BackgroundColor="#8E24AA" TextColor="White" FontAttributes="Bold" CornerRadius="6" x:Name="BtnPanicMode"/>
+                                    <Button Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Text="🛑 ACİL DURDUR (KILL-SWITCH)" BackgroundColor="#F44336" TextColor="White" FontAttributes="Bold" CornerRadius="6" x:Name="BtnAcilDurdur"/>
+                                </Grid>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <!-- MODÜL 2: TİM MOTOR AYARLARI (TUM_AYARLARI_GUNCELLE) -->
+                        <Border BackgroundColor="#252526" Padding="15" StrokeThickness="1" Stroke="#333" StrokeShape="RoundRectangle 8">
+                            <VerticalStackLayout Spacing="15">
+                                <Label Text="⚙️ Tim Ana Parametreleri" TextColor="#00BCD4" FontAttributes="Bold"/>
+
+                                <!-- Şalterler -->
+                                <Grid ColumnDefinitions="*, *, *" RowDefinitions="Auto, Auto, Auto, Auto" RowSpacing="10" ColumnSpacing="10">
+                                    <HorizontalStackLayout Grid.Row="0" Grid.Column="0" Spacing="5">
+                                        <Switch x:Name="SwAutoPlay"/>
+                                        <Label Text="Auto Play" TextColor="White" VerticalOptions="Center" FontSize="12"/>
+                                    </HorizontalStackLayout>
+                                    <HorizontalStackLayout Grid.Row="0" Grid.Column="1" Spacing="5">
+                                        <Switch x:Name="SwAutoReplay"/>
+                                        <Label Text="Auto Replay" TextColor="White" VerticalOptions="Center" FontSize="12"/>
+                                    </HorizontalStackLayout>
+                                    <HorizontalStackLayout Grid.Row="0" Grid.Column="2" Spacing="5">
+                                        <Switch x:Name="SwAutoJoin"/>
+                                        <Label Text="Auto Join" TextColor="White" VerticalOptions="Center" FontSize="12"/>
+                                    </HorizontalStackLayout>
+
+                                    <HorizontalStackLayout Grid.Row="1" Grid.Column="0" Spacing="5">
+                                        <Switch x:Name="SwAutoCreate"/>
+                                        <Label Text="Auto Create" TextColor="White" VerticalOptions="Center" FontSize="12"/>
+                                    </HorizontalStackLayout>
+                                    <HorizontalStackLayout Grid.Row="1" Grid.Column="1" Spacing="5">
+                                        <Switch x:Name="SwLobbyQuit"/>
+                                        <Label Text="Lobi Oto Çıkış" TextColor="White" VerticalOptions="Center" FontSize="12"/>
+                                    </HorizontalStackLayout>
+                                    <HorizontalStackLayout Grid.Row="1" Grid.Column="2" Spacing="5">
+                                        <Switch x:Name="SwJoinCase"/>
+                                        <Label Text="Harf Duyarlılığı" TextColor="White" VerticalOptions="Center" FontSize="12"/>
+                                    </HorizontalStackLayout>
+
+                                    <HorizontalStackLayout Grid.Row="2" Grid.Column="0" Spacing="5">
+                                        <Switch x:Name="SwDebug"/>
+                                        <Label Text="Debug Mode" TextColor="Gray" VerticalOptions="Center" FontSize="12"/>
+                                    </HorizontalStackLayout>
+                                    <HorizontalStackLayout Grid.Row="2" Grid.Column="1" Spacing="5">
+                                        <Switch x:Name="SwShowHidden"/>
+                                        <Label Text="Gizli Lvl Göster" TextColor="White" VerticalOptions="Center" FontSize="12"/>
+                                    </HorizontalStackLayout>
+                                    <HorizontalStackLayout Grid.Row="2" Grid.Column="2" Spacing="5">
+                                        <Switch x:Name="SwTelemetry" IsToggled="True"/>
+                                        <Label Text="Telemetry (Ağ)" TextColor="#4CAF50" VerticalOptions="Center" FontSize="12"/>
+                                    </HorizontalStackLayout>
+
+                                    <HorizontalStackLayout Grid.Row="3" Grid.Column="0" Spacing="5">
+                                        <Switch x:Name="SwChatStats"/>
+                                        <Label Text="Chat Stats" TextColor="White" VerticalOptions="Center" FontSize="12"/>
+                                    </HorizontalStackLayout>
+                                    <HorizontalStackLayout Grid.Row="3" Grid.Column="1" Spacing="5">
+                                        <Switch x:Name="SwChatSound"/>
+                                        <Label Text="Börüssenger Sesi" TextColor="White" VerticalOptions="Center" FontSize="12"/>
+                                    </HorizontalStackLayout>
+                                </Grid>
+
+                                <BoxView HeightRequest="1" Color="#333333" />
+
+                                <!-- Inputlar -->
+                                <Grid ColumnDefinitions="*, *" RowDefinitions="Auto, Auto, Auto, Auto" RowSpacing="10" ColumnSpacing="15">
+                                    <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                                        <Label Text="Oda Filtresi (Join)" TextColor="Gray" FontSize="11"/>
+                                        <Entry x:Name="EntJoinFilter" BackgroundColor="#1E1E1E" TextColor="White" HeightRequest="35"/>
+                                    </VerticalStackLayout>
+                                    <VerticalStackLayout Grid.Row="0" Grid.Column="1">
+                                        <Label Text="Yasaklı Kelimeler (Exclude)" TextColor="Gray" FontSize="11"/>
+                                        <Entry x:Name="EntJoinExclude" BackgroundColor="#1E1E1E" TextColor="#F44336" HeightRequest="35"/>
+                                    </VerticalStackLayout>
+
+                                    <VerticalStackLayout Grid.Row="1" Grid.Column="0">
+                                        <Label Text="Oda Şifresi" TextColor="Gray" FontSize="11"/>
+                                        <Entry x:Name="EntJoinPassword" BackgroundColor="#1E1E1E" TextColor="#FFC300" HeightRequest="35"/>
+                                    </VerticalStackLayout>
+                                    <VerticalStackLayout Grid.Row="1" Grid.Column="1">
+                                        <Label Text="Şablon Adı (Create)" TextColor="Gray" FontSize="11"/>
+                                        <Entry x:Name="EntCreateTemplate" BackgroundColor="#1E1E1E" TextColor="White" HeightRequest="35"/>
+                                    </VerticalStackLayout>
+
+                                    <VerticalStackLayout Grid.Row="2" Grid.Column="0">
+                                        <Label Text="Oturulacak Slot (0=Kpl)" TextColor="Gray" FontSize="11"/>
+                                        <Entry x:Name="EntSlot" Keyboard="Numeric" BackgroundColor="#1E1E1E" TextColor="White" HeightRequest="35"/>
+                                    </VerticalStackLayout>
+                                    <VerticalStackLayout Grid.Row="2" Grid.Column="1">
+                                        <Label Text="P2P Tag (Börüssenger)" TextColor="Gray" FontSize="11"/>
+                                        <Entry x:Name="EntP2PCode" Keyboard="Numeric" MaxLength="4" BackgroundColor="#1E1E1E" TextColor="#0af2ff" HeightRequest="35"/>
+                                    </VerticalStackLayout>
+
+                                    <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" ColumnDefinitions="*,*,*">
+                                        <VerticalStackLayout Grid.Column="0" Margin="0,0,5,0">
+                                            <Label Text="Lobi Limit (Sn)" TextColor="Gray" FontSize="11"/>
+                                            <Entry x:Name="EntLobbyQuit" Keyboard="Numeric" BackgroundColor="#1E1E1E" TextColor="White" HeightRequest="35"/>
+                                        </VerticalStackLayout>
+                                        <VerticalStackLayout Grid.Column="1" Margin="5,0,5,0">
+                                            <Label Text="Oto Yenileme (Dk)" TextColor="Gray" FontSize="11"/>
+                                            <Entry x:Name="EntRefresh" Keyboard="Numeric" BackgroundColor="#1E1E1E" TextColor="White" HeightRequest="35"/>
+                                        </VerticalStackLayout>
+                                        <VerticalStackLayout Grid.Column="2" Margin="5,0,0,0">
+                                            <Label Text="Host Timeout (Sn)" TextColor="Gray" FontSize="11"/>
+                                            <Entry x:Name="EntHostTimeout" Keyboard="Numeric" BackgroundColor="#1E1E1E" TextColor="White" HeightRequest="35"/>
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Grid>
+
+                                <!-- 🔥 YENİ: AYAR ŞABLONU SİSTEMİ 🔥 -->
+                                <BoxView HeightRequest="1" Color="#333333" Margin="0,5,0,5"/>
+                                <Grid ColumnDefinitions="*, Auto, Auto" ColumnSpacing="10" Margin="0,0,0,5">
+                                    <Picker Grid.Column="0" x:Name="PickerSablonlar" Title="📁 Kayıtlı Şablon Seç..." BackgroundColor="#1E1E1E" TextColor="White" HeightRequest="45" TitleColor="Gray"/>
+                                    <Button Grid.Column="1" Text="💾 Şablonu Kaydet" BackgroundColor="#2196F3" TextColor="White" FontAttributes="Bold" CornerRadius="6" x:Name="BtnSablonKaydet"/>
+                                    <Button Grid.Column="2" Text="📂 Yükle" BackgroundColor="#FF9800" TextColor="White" FontAttributes="Bold" CornerRadius="6" x:Name="BtnSablonYukle"/>
+                                </Grid>
+
+                              
+                                <Button x:Name="BtnAyarlariGonder" Text="🚀 SEÇİLİ TİME AYARLARI UYGULA" BackgroundColor="#4CAF50" TextColor="White" FontAttributes="Bold" CornerRadius="8" HeightRequest="45" Margin="0,5,0,0"/>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <!-- MODÜL 3: SAHA İLETİŞİMİ & OYUN İÇİ -->
+                        <Border BackgroundColor="#252526" Padding="15" StrokeThickness="1" Stroke="#333" StrokeShape="RoundRectangle 8">
+                            <VerticalStackLayout Spacing="10">
+                                <Label Text="💬 Saha İletişimi (Oyun İçi)" TextColor="#FF9800" FontAttributes="Bold"/>
+
+                                <Grid ColumnDefinitions="*, Auto" RowSpacing="10" ColumnSpacing="10">
+                                    <Entry Grid.Row="0" Grid.Column="0" x:Name="EntYeniBio" Placeholder="Yeni Biyografi Metni..." BackgroundColor="#1E1E1E" TextColor="White" HeightRequest="40"/>
+                                    <Button Grid.Row="0" Grid.Column="1" Text="🦅 Bio Ayarla" BackgroundColor="#FF9800" TextColor="Black" FontAttributes="Bold" CornerRadius="6" x:Name="BtnBioAyarla"/>
+
+                                    <Entry Grid.Row="1" Grid.Column="0" x:Name="EntOyunChat" Placeholder="Oyun Chatine Gönderilecek Mesaj..." BackgroundColor="#1E1E1E" TextColor="White" HeightRequest="40"/>
+                                    <Button Grid.Row="1" Grid.Column="1" Text="✉️ Chate Yaz" BackgroundColor="#FF9800" TextColor="Black" FontAttributes="Bold" CornerRadius="6" x:Name="BtnOyunChatYaz"/>
+                                </Grid>
+
+                                <Grid ColumnDefinitions="*, *, *" ColumnSpacing="10" Margin="0,5,0,0">
+                                    <Button Grid.Column="0" Text="🌹 Herkese Gül At" BackgroundColor="#E91E63" TextColor="White" FontAttributes="Bold" CornerRadius="6" x:Name="BtnHerkeseGul"/>
+                                    <Button Grid.Column="1" Text="😂 Random Emote" BackgroundColor="#8E24AA" TextColor="White" FontAttributes="Bold" CornerRadius="6" x:Name="BtnRandomEmote"/>
+                                    <Button Grid.Column="2" Text="🎯 Özel Gül Gönder" BackgroundColor="#E91E63" TextColor="White" FontAttributes="Bold" CornerRadius="6" x:Name="BtnOzelGul"/>
+                                </Grid>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <!-- MODÜL 4: BÖRÜSSENGER (P2P İSTİHBARAT) -->
+                        <Border BackgroundColor="#252526" Padding="15" StrokeThickness="1" Stroke="#333" StrokeShape="RoundRectangle 8">
+                            <VerticalStackLayout Spacing="10">
+                                <Label Text="🐺 Börüssenger Yönetimi (P2P)" TextColor="#0af2ff" FontAttributes="Bold"/>
+
+                                <!-- Üstteki 3'lü Butonlar -->
+                                <Grid ColumnDefinitions="*, *, *" ColumnSpacing="10">
+                                    <Button Grid.Column="0" Text="💾 Verileri Yedekle" BackgroundColor="#333" TextColor="#0af2ff" FontAttributes="Bold" CornerRadius="6" x:Name="BtnP2PYedekle"/>
+                                    <Button Grid.Column="1" Text="🗑️ Mesajları Sil" BackgroundColor="#333" TextColor="#F44336" FontAttributes="Bold" CornerRadius="6" x:Name="BtnP2PSil"/>
+                                    <Button Grid.Column="2" Text="🔄 Senkronize Et" BackgroundColor="#333" TextColor="#4CAF50" FontAttributes="Bold" CornerRadius="6" x:Name="BtnP2PSync"/>
+                                </Grid>
+
+                                <!-- YANLIŞLIKLA SİLDİĞİN KISIM VE DÜZELTİLMİŞ GRID -->
+                                <Grid ColumnDefinitions="100, *, Auto" RowDefinitions="Auto, Auto, Auto" RowSpacing="10" ColumnSpacing="10" Margin="0,5,0,0">
+
+                                    
+                                    <!-- Row 2: Börüssenger Paneli Aç (Turuncu Buton) -->
+                                    <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Text="📱 BÖRÜSSENGER PANELİNİ AÇ (Arayüz)" 
+                                            BackgroundColor="#FB2E00" TextColor="White" FontAttributes="Bold" CornerRadius="6" 
+                                            HeightRequest="45" Margin="0,5,0,0" x:Name="BtnBorussengerAc" Clicked="OnBorussengerAcClicked"/>
+                                </Grid>
+
+                            </VerticalStackLayout>
+                        </Border>
+
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Border>
+        </Grid>
+
+        <Grid x:Name="AyarlarEkrani" Grid.Row="1" IsVisible="False" Padding="20">
+            <ScrollView HorizontalOptions="Center">
+                <VerticalStackLayout Spacing="25" MaximumWidthRequest="700" Padding="0,20">
+                    <Label Text="Sistem Ayarları" TextColor="White" FontSize="28" FontAttributes="Bold" HorizontalOptions="Center" />
+
+                    <Border BackgroundColor="#1E1E1E" Padding="20" StrokeShape="RoundRectangle 10" StrokeThickness="0">
+                        <VerticalStackLayout Spacing="15">
+                            <Label Text="Görünüm ve Bakım" TextColor="#4CAF50" FontSize="18" FontAttributes="Bold" />
+                            <HorizontalStackLayout Spacing="20">
+                                <Switch x:Name="SwitchGizlilik" Toggled="OnGizlilikToggled" />
+                                <VerticalStackLayout>
+                                    <Label Text="Gizlilik Modu (Screenshot Modu)" TextColor="White" />
+                                    <Label Text="Tablodaki hesap isimlerini yıldızlayarak gizler." TextColor="Gray" FontSize="11" />
+                                </VerticalStackLayout>
+                            </HorizontalStackLayout>
+                            <BoxView HeightRequest="1" Color="#333333" />
+                            <Label Text="Otomatik Veri Temizleme" TextColor="White" />
+                            <Picker x:Name="PickerBakim" Title="Süre Seç" TextColor="White" BackgroundColor="#2D2D2D" SelectedIndexChanged="OnPickerBakimChanged">
+                                <Picker.ItemsSource>
+                                    <x:Array Type="{x:Type x:String}">
+                                        <x:String>Asla (Kapalı)</x:String>
+                                        <x:String>3 Günden Eski Verileri Sil</x:String>
+                                        <x:String>7 Günden Eski Verileri Sil</x:String>
+                                        <x:String>30 Günden Eski Verileri Sil</x:String>
+                                    </x:Array>
+                                </Picker.ItemsSource>
+                            </Picker>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border BackgroundColor="#1E1E1E" StrokeThickness="1" Stroke="#F44336" Padding="30" StrokeShape="RoundRectangle 15">
+                        <VerticalStackLayout Spacing="15" HorizontalOptions="Center">
+                            <Label Text="⚠️ Kritik Veri Yönetimi" TextColor="#F44336" FontSize="20" FontAttributes="Bold" />
+                            <Button Text="🗑️ Tüm Veritabanını Sıfırla" BackgroundColor="#F44336" TextColor="White" CornerRadius="10" WidthRequest="350" HeightRequest="50" Clicked="OnVeritabaniniSifirlaClicked" />
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+
+
+
+
+        <!-- ========================================== -->
+        <!-- 🔥 BÖRÜSSENGER ARAYÜZÜ (GİZLİ PENCERE) 🔥 -->
+        <!-- ========================================== -->
+        <Grid x:Name="BorussengerEkrani" Grid.Row="0" Grid.RowSpan="2" IsVisible="False" BackgroundColor="#CC000000" ZIndex="999">
+
+            <!-- Pencere Çerçevesi -->
+            <Border WidthRequest="850" HeightRequest="550" BackgroundColor="#1E1E1E" Stroke="#FB2E00" StrokeThickness="1" StrokeShape="RoundRectangle 12" HorizontalOptions="Center" VerticalOptions="Center" Padding="0">
+                <Grid ColumnDefinitions="250, *">
+
+                    <!-- SOL PANEL: KİŞİLER LİSTESİ -->
+                    <Grid Grid.Column="0" BackgroundColor="#252526" RowDefinitions="Auto, *, Auto">
+
+                        <Grid Grid.Row="0" Padding="15">
+                            <BoxView HeightRequest="1" Color="#333" VerticalOptions="End" HorizontalOptions="Fill"/>
+                            <Label Text="KİŞİLER" TextColor="#FB2E00" FontAttributes="Bold" FontSize="14" VerticalOptions="Center"/>
+                            <Label Text="+" TextColor="#00BCD4" FontSize="20" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" ToolTipProperties.Text="Kişi Ekle"/>
+                        </Grid>
+
+                        <ScrollView Grid.Row="1">
+                            <VerticalStackLayout x:Name="SlKisiler" Spacing="0">
+                                <!-- Sahte kişiler C# kodundan buraya dolacak -->
+                            </VerticalStackLayout>
+                        </ScrollView>
+
+                        <Grid Grid.Row="2" Padding="15" BackgroundColor="#202020">
+                            <BoxView HeightRequest="1" Color="#333" VerticalOptions="Start" HorizontalOptions="Fill"/>
+                            <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                                <BoxView WidthRequest="12" HeightRequest="12" CornerRadius="6" Color="#4CAF50" VerticalOptions="Center"/>
+                                <Label Text="Ben (Karargah)" TextColor="White" FontAttributes="Bold" FontSize="12" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                            <Label Text="⚙️" TextColor="Gray" FontSize="16" HorizontalOptions="End" VerticalOptions="Center"/>
+                        </Grid>
+                    </Grid>
+
+                    <!-- SAĞ PANEL: SOHBET EKRANI -->
+                    <Grid Grid.Column="1" BackgroundColor="#1E1E1E" RowDefinitions="Auto, *, Auto">
+
+                        <!-- Üst Bar -->
+                        <Grid Grid.Row="0" BackgroundColor="#252526" Padding="15">
+                            <BoxView HeightRequest="1" Color="#FB2E00" VerticalOptions="End" HorizontalOptions="Fill"/>
+                            <HorizontalStackLayout Spacing="10">
+                                <BoxView WidthRequest="12" HeightRequest="12" CornerRadius="6" Color="#4CAF50" VerticalOptions="Center"/>
+                                <Label x:Name="LblSohbetHedef" Text="Ahmet_TR#1923" TextColor="White" FontAttributes="Bold" FontSize="16" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                            <!-- Kapatma Tuşu -->
+                            <Button Text="❌" BackgroundColor="Transparent" TextColor="Gray" HorizontalOptions="End" VerticalOptions="Center" WidthRequest="40" HeightRequest="40" Clicked="OnBorussengerKapatClicked"/>
+                        </Grid>
+
+                        <!-- Sohbet Geçmişi -->
+                        <ScrollView Grid.Row="1" Margin="0,10" x:Name="SvSohbetGecmisi">
+                            <VerticalStackLayout x:Name="SlSohbetGecmisi" Padding="15" Spacing="15">
+                                <!-- Sahte mesajlar C# kodundan buraya dolacak -->
+                            </VerticalStackLayout>
+                        </ScrollView>
+
+                        <!-- Alt Input Barı -->
+                        <Grid Grid.Row="2" BackgroundColor="#252526" ColumnDefinitions="Auto, Auto, *, Auto" Padding="10,15" ColumnSpacing="8">
+                            <Button Grid.Column="0" Text="📷" BackgroundColor="#444" TextColor="White" CornerRadius="4" WidthRequest="45" HeightRequest="40"/>
+
+                            <!-- Rol Atma Tuşuna da Click Ekledik -->
+                            <Button Grid.Column="1" Text="🃏" BackgroundColor="#444" TextColor="White" CornerRadius="4" WidthRequest="45" HeightRequest="40" Clicked="OnBorussengerCanliRolGonder"/>
+
+                            <!-- X:Name ve Completed (Enter'a basınca çalışması için) ekledik -->
+                            <Entry Grid.Column="2" x:Name="EntBorussengerCanliMesaj" Placeholder="Mesaj yaz (Göndermek için Enter)..." BackgroundColor="#3C3C3C" TextColor="White" HeightRequest="40" ReturnType="Send" Completed="OnBorussengerCanliMesajGonder"/>
+
+                            <!-- X:Name ve Clicked ekledik -->
+                            <Button Grid.Column="3" x:Name="BtnBorussengerCanliGonder" Text="GÖNDER" BackgroundColor="#FB2E00" TextColor="White" FontAttributes="Bold" CornerRadius="4" HeightRequest="40" Clicked="OnBorussengerCanliMesajGonder"/>
+                        </Grid>
+
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentPage>
